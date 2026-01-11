@@ -69,6 +69,14 @@
 - [ ] Implement real server SSH connections
 - [ ] Fix dashboard server updates - implement real provisioning
 
+## Settings & API Management
+- [x] Build Settings page layout
+- [x] Create API key generation form
+- [x] Implement API key list display with copy functionality
+- [x] Add API key revocation with confirmation
+- [x] Show API key usage statistics
+- [x] Add webhook documentation in Settings
+
 ## System Information
 - [x] Display OS details and version
 - [x] Show kernel version information
