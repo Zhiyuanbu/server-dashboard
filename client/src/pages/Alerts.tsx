@@ -9,12 +9,15 @@ import { toast } from "sonner";
 
 export default function Alerts() {
   const { user, loading: authLoading } = useAuth();
-  const { data: servers } = trpc.servers.list.useQuery();
+  const { data: servers, isLoading: serversLoading } = trpc.servers.list.useQuery();
   
-  // Get alerts for all servers
+  // Get alerts for all servers - only query when servers are loaded
   const serverAlerts = servers?.map(server => ({
     server,
-    alerts: trpc.alerts.list.useQuery({ serverId: server.id, includeAcknowledged: false }),
+    alerts: trpc.alerts.list.useQuery(
+      { serverId: server.id, includeAcknowledged: false },
+      { enabled: !!servers } // Only enable query when servers are available
+    ),
   })) || [];
 
   const acknowledgeAlert = trpc.alerts.acknowledge.useMutation({
@@ -28,7 +31,7 @@ export default function Alerts() {
     },
   });
 
-  if (authLoading) {
+  if (authLoading || serversLoading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
