@@ -198,3 +198,45 @@ export const logAnalysis = mysqlTable("logAnalysis", {
 
 export type LogAnalysis = typeof logAnalysis.$inferSelect;
 export type InsertLogAnalysis = typeof logAnalysis.$inferInsert;
+
+/**
+ * API keys for webhook authentication
+ */
+export const apiKeys = mysqlTable("apiKeys", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  key: varchar("key", { length: 255 }).notNull().unique(),
+  active: boolean("active").default(true).notNull(),
+  lastUsed: timestamp("lastUsed"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("userIdIdx").on(table.userId),
+  keyIdx: index("keyIdx").on(table.key),
+}));
+
+export type ApiKey = typeof apiKeys.$inferSelect;
+export type InsertApiKey = typeof apiKeys.$inferInsert;
+
+/**
+ * Webhook event logs
+ */
+export const webhookLogs = mysqlTable("webhookLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: varchar("action", { length: 100 }).notNull(),
+  serverId: int("serverId"),
+  payload: text("payload").notNull(), // JSON string
+  response: text("response"), // JSON string
+  status: mysqlEnum("status", ["success", "failed", "pending"]).default("pending").notNull(),
+  errorMessage: text("errorMessage"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("userIdIdx").on(table.userId),
+  actionIdx: index("actionIdx").on(table.action),
+  timestampIdx: index("timestampIdx").on(table.timestamp),
+}));
+
+export type WebhookLog = typeof webhookLogs.$inferSelect;
+export type InsertWebhookLog = typeof webhookLogs.$inferInsert;

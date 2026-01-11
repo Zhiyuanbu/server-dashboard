@@ -67,6 +67,7 @@
 - [x] Fix Alerts page JSON parsing error
 - [x] Fix Add Server button - create modal dialog
 - [ ] Implement real server SSH connections
+- [ ] Fix dashboard server updates - implement real provisioning
 
 ## System Information
 - [x] Display OS details and version
@@ -82,10 +83,18 @@
 - [x] Create empty states for all views
 - [x] Add tooltips and helpful guidance
 
-## Real Server Integration
-- [x] Implement SSH connection library for real server monitoring
-- [x] Create Add Server modal dialog with form
-- [x] Add server connection validation and testing
+## Webhook API & Server Provisioning
+- [ ] Create webhook endpoint for server creation/deletion/updates
+- [ ] Implement server provisioning logic (create, start, stop, delete)
+- [ ] Add webhook authentication and signature verification
+- [ ] Create API documentation endpoint
+- [ ] Implement server state machine (pending, running, stopped, terminated)
+- [ ] Add webhook event logging and retry mechanism
+- [ ] Create API key management for external integrations
+
+## Real Server Management
 - [ ] Implement real metrics collection from actual servers
-- [x] Fix Add Server button functionality
+- [ ] Create server lifecycle hooks (on_create, on_start, on_stop, on_delete)
+- [ ] Add server status polling and updates
 - [ ] Display live data from connected servers
+- [ ] Implement server action endpoints (start, stop, restart, delete)

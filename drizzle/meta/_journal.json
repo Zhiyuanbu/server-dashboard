@@ -15,6 +15,13 @@
       "when": 1768162903741,
       "tag": "0001_parallel_tattoo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1768164539629,
+      "tag": "0002_last_wendell_vaughn",
+      "breakpoints": true
     }
   ]
 }

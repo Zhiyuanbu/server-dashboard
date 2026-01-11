@@ -2,6 +2,7 @@ import { z } from "zod";
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
+import { webhookRouter } from "./webhookRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import * as db from "./db";
 import { TRPCError } from "@trpc/server";
@@ -474,8 +475,9 @@ export const appRouter = router({
           recommendations,
           severity: 'info',
         });
-      }),
+       }),
   }),
-});
 
+  webhook: webhookRouter,
+});
 export type AppRouter = typeof appRouter;

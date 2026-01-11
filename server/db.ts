@@ -8,7 +8,9 @@ import {
   alertConfigs, AlertConfig, InsertAlertConfig,
   alerts, Alert, InsertAlert,
   serverPermissions, ServerPermission, InsertServerPermission,
-  logAnalysis, LogAnalysis, InsertLogAnalysis
+  logAnalysis, LogAnalysis, InsertLogAnalysis,
+  apiKeys, ApiKey, InsertApiKey,
+  webhookLogs, WebhookLog, InsertWebhookLog
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -446,4 +448,83 @@ export async function getServerLogAnalysis(serverId: number, limit: number = 20)
     .where(eq(logAnalysis.serverId, serverId))
     .orderBy(desc(logAnalysis.createdAt))
     .limit(limit);
+}
+
+// ===== API Keys =====
+
+export async function createApiKey(apiKey: InsertApiKey): Promise<ApiKey> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(apiKeys).values(apiKey);
+  const created = await db.select().from(apiKeys).where(eq(apiKeys.key, apiKey.key)).limit(1);
+  return created[0]!;
+}
+
+export async function getApiKeyByKey(key: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(apiKeys).where(eq(apiKeys.key, key)).limit(1);
+  return result[0];
+}
+
+export async function getApiKeyById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(apiKeys).where(eq(apiKeys.id, id)).limit(1);
+  return result[0];
+}
+
+export async function getApiKeysByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(apiKeys).where(eq(apiKeys.userId, userId));
+}
+
+export async function updateApiKey(id: number, updates: Partial<InsertApiKey>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.update(apiKeys).set(updates).where(eq(apiKeys.id, id));
+  return await getApiKeyById(id);
+}
+
+export async function deleteApiKey(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(apiKeys).where(eq(apiKeys.id, id));
+}
+
+// ===== Webhook Logs =====
+
+export async function createWebhookLog(log: InsertWebhookLog): Promise<WebhookLog> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(webhookLogs).values(log);
+  const created = await db.select().from(webhookLogs).orderBy(desc(webhookLogs.id)).limit(1);
+  return created[0]!;
+}
+
+export async function getWebhookLogsByUserId(userId: number, limit: number = 50, offset: number = 0) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(webhookLogs)
+    .where(eq(webhookLogs.userId, userId))
+    .orderBy(desc(webhookLogs.timestamp))
+    .limit(limit)
+    .offset(offset);
+}
+
+export async function getUserById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  return result[0];
 }
