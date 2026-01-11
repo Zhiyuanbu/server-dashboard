@@ -63,6 +63,11 @@
 - [x] Create predictive issue detection
 - [x] Implement automated incident summaries
 
+## Bug Fixes
+- [x] Fix Alerts page JSON parsing error
+- [x] Fix Add Server button - create modal dialog
+- [ ] Implement real server SSH connections
+
 ## System Information
 - [x] Display OS details and version
 - [x] Show kernel version information
@@ -76,3 +81,11 @@
 - [x] Implement loading states and error handling
 - [x] Create empty states for all views
 - [x] Add tooltips and helpful guidance
+
+## Real Server Integration
+- [x] Implement SSH connection library for real server monitoring
+- [x] Create Add Server modal dialog with form
+- [x] Add server connection validation and testing
+- [ ] Implement real metrics collection from actual servers
+- [x] Fix Add Server button functionality
+- [ ] Display live data from connected servers

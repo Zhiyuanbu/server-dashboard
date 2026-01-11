@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
+import AddServerDialog from "@/components/AddServerDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
@@ -7,8 +8,10 @@ import { Activity, AlertTriangle, CheckCircle2, Clock, Cpu, Database, HardDrive,
 import { Link } from "wouter";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 export default function Dashboard() {
+  const [showAddServer, setShowAddServer] = useState(false);
   const { user, loading: authLoading } = useAuth();
   const { data: servers, isLoading, refetch } = trpc.servers.list.useQuery();
   const initializeDemoServers = trpc.servers.initializeDemoServers.useMutation({
@@ -146,7 +149,7 @@ export default function Dashboard() {
                   {initializeDemoServers.isPending ? "Initializing..." : "Add Demo Servers"}
                 </Button>
               )}
-              <Button size="sm">
+              <Button size="sm" onClick={() => setShowAddServer(true)}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add Server
               </Button>
@@ -205,6 +208,12 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      <AddServerDialog
+        open={showAddServer}
+        onOpenChange={setShowAddServer}
+        onServerAdded={() => refetch()}
+      />
     </DashboardLayout>
   );
 }

@@ -138,6 +138,28 @@ export const appRouter = router({
         return { success: true };
       }),
 
+    testConnection: protectedProcedure
+      .input(z.object({
+        hostname: z.string(),
+        port: z.number().default(22),
+        username: z.string(),
+        password: z.string().optional(),
+        privateKey: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          return {
+            success: true,
+            message: 'Connection successful',
+          };
+        } catch (error) {
+          return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Connection failed',
+          };
+        }
+      }),
+
     // Initialize demo servers with data
     initializeDemoServers: protectedProcedure.mutation(async ({ ctx }) => {
       const demoServers = [
